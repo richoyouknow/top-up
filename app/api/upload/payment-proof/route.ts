@@ -1,0 +1,59 @@
+import { NextResponse } from 'next/server';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { randomUUID } from 'node:crypto';
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+export const runtime = 'nodejs';
+
+export async function POST(request: Request) {
+  try {
+    const formData = await request.formData();
+    const file = formData.get('file');
+
+    if (!(file instanceof File)) {
+      return NextResponse.json(
+        { success: false, message: 'File tidak ditemukan.' },
+        { status: 400 }
+      );
+    }
+
+    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { success: false, message: 'Format file harus JPG, PNG, atau WEBP.' },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { success: false, message: 'Ukuran file maksimal 5MB.' },
+        { status: 400 }
+      );
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'png';
+    const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
+
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'payment-proof');
+    await mkdir(uploadDir, { recursive: true });
+
+    const filePath = path.join(uploadDir, fileName);
+    await writeFile(filePath, buffer);
+
+    const publicUrl = `/uploads/payment-proof/${fileName}`;
+
+    return NextResponse.json({ success: true, url: publicUrl });
+  } catch (error) {
+    console.error('Upload payment proof failed:', error);
+    return NextResponse.json(
+      { success: false, message: 'Gagal upload bukti pembayaran.' },
+      { status: 500 }
+    );
+  }
+}
