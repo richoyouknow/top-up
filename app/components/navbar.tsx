@@ -122,13 +122,13 @@ export default function Navbar() {
             className="flex items-center gap-3 group"
             onClick={(e) => handleLinkClick(e, '/')}
           >
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#13111b] border border-white/5 group-hover:border-neon-purple/50 transition-all duration-500 overflow-hidden shadow-2xl">
+            <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-[#13111b] border border-white/5 group-hover:border-neon-purple/50 transition-all duration-500 overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-tr from-[#7c3aed]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <Image 
                 src="/logo.png" 
                 alt="ChampionStore Logo" 
-                width={28}
-                height={28}
+                width={34}
+                height={34}
                 className="relative z-10 transition-transform duration-500 group-hover:scale-110"
               />
             </div>

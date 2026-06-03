@@ -41,13 +41,13 @@ export default function Footer() {
           {/* BRAND COLUMN */}
           <div className="md:col-span-2 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2.5 w-max group">
-              <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-[#13111b] border border-dark-purple group-hover:border-neon-purple transition-all duration-300 overflow-hidden">
+              <div className="relative flex items-center justify-center w-11 h-11 rounded-lg bg-[#13111b] border border-dark-purple group-hover:border-neon-purple transition-all duration-300 overflow-hidden">
                 <Image 
                   src="/logo.png" 
                   alt="ChampionStore Logo" 
                   fill 
                   style={{ objectFit: 'contain' }} 
-                  className="p-1"
+                  className="p-1.5"
                 />
               </div>
               <span className="text-lg font-bold tracking-tight text-white">

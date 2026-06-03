@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -187,7 +188,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar (Desktop) */}
       <aside className="hidden md:flex flex-col w-64 bg-[#0a0a0a] border-r border-neutral-800">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-neon-purple flex items-center justify-center font-bold text-lg">C</div>
+          <div className="relative flex items-center justify-center w-10 h-10 rounded bg-[#13111b] border border-white/5 overflow-hidden">
+            <Image 
+              src="/logo.png" 
+              alt="Logo" 
+              fill
+              sizes="40px"
+              style={{ objectFit: 'contain' }}
+              className="p-1"
+            />
+          </div>
           <span className="font-bold text-xl tracking-tight">AdminPanel</span>
         </div>
         
@@ -231,7 +241,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <aside className="relative w-64 max-w-sm bg-[#0a0a0a] h-full flex flex-col border-r border-neutral-800 shadow-2xl">
             <div className="p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded bg-neon-purple flex items-center justify-center font-bold text-lg">C</div>
+                <div className="relative flex items-center justify-center w-10 h-10 rounded bg-[#13111b] border border-white/5 overflow-hidden">
+                  <Image 
+                    src="/logo.png" 
+                    alt="Logo" 
+                    fill
+                    sizes="40px"
+                    style={{ objectFit: 'contain' }}
+                    className="p-1"
+                  />
+                </div>
                 <span className="font-bold text-xl tracking-tight">AdminPanel</span>
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="text-neutral-400 hover:text-white">
