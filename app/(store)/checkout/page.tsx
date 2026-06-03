@@ -19,6 +19,7 @@ interface CheckoutSettings {
   bankAccountNumber: string;
   bankAccountHolder: string;
   bankTransferNotes: string;
+  whatsapp?: string;
 }
 
 const DEFAULT_SETTINGS: CheckoutSettings = {
@@ -27,9 +28,10 @@ const DEFAULT_SETTINGS: CheckoutSettings = {
   bankAccountNumber: '1234567890',
   bankAccountHolder: 'ChampionStore.id',
   bankTransferNotes: 'Gunakan nominal yang sesuai agar verifikasi lebih cepat.',
+  whatsapp: '6281234567890',
 };
 
-const ADMIN_WHATSAPP = '082132394872';
+const ADMIN_WHATSAPP_FALLBACK = '6281234567890';
 
 export default function Checkout() {
   const router = useRouter();
@@ -171,7 +173,8 @@ export default function Checkout() {
       console.error('Confetti failed to trigger:', err);
     }
 
-    const normalizedAdminPhone = normalizePhone(ADMIN_WHATSAPP);
+    const adminPhone = settings.whatsapp || ADMIN_WHATSAPP_FALLBACK;
+    const normalizedAdminPhone = normalizePhone(adminPhone);
     const itemsListText = cartItems
       .map((item) => `- ${item.product.name} x${item.quantity} (Rp${(item.product.price * item.quantity).toLocaleString('id-ID')})`)
       .join('\n');

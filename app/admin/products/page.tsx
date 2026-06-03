@@ -6,6 +6,7 @@ import {
   Search, Plus, Edit2, Trash2, Eye, EyeOff, MoreVertical, X, Check, Loader2, Upload
 } from 'lucide-react';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '@/app/actions/product';
+import { getCategories } from '@/app/actions/category';
 
 export default function ProductsManager() {
   const [products, setProducts] = useState<any[]>([]);
@@ -17,6 +18,7 @@ export default function ProductsManager() {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
+  const [dbCategories, setDbCategories] = useState<any[]>([]);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -32,6 +34,7 @@ export default function ProductsManager() {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -41,7 +44,12 @@ export default function ProductsManager() {
     setIsLoading(false);
   };
 
-  const categories = ['All', 'Coins', 'Cash', 'Legendary Cues', 'Cue Pieces', 'Event Bundles'];
+  const fetchCategories = async () => {
+    const data = await getCategories();
+    setDbCategories(data);
+  };
+
+  const categories = ['All', ...dbCategories.map(c => c.name)];
 
   const getSafeImageSrc = (src?: string | null) => {
     const value = (src ?? '').trim();
@@ -89,7 +97,7 @@ export default function ProductsManager() {
     setEditingProduct(null);
     setFormData({
       name: '',
-      category: 'Coins',
+      category: dbCategories[0]?.name || '',
       price: '',
       originalPrice: '',
       description: '',

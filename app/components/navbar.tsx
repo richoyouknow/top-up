@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { ShoppingBag, Menu, X, MessageSquare, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/cart-context';
+import { getSettings } from '@/app/actions/setting';
 
 const navLinks = [
   { name: 'Beranda', href: '/' },
@@ -21,9 +22,20 @@ export default function Navbar() {
   const [activePath, setActivePath] = useState('/');
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [whatsapp, setWhatsapp] = useState('6281234567890');
   
   const [pillStyle, setPillStyle] = useState({ width: 0, left: 0, opacity: 0 });
   const navRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const data = await getSettings();
+      if (data.whatsapp) {
+        setWhatsapp(data.whatsapp);
+      }
+    }
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -185,7 +197,7 @@ export default function Navbar() {
             <motion.a
               whileHover={{ scale: 1.02, translateY: -1 }}
               whileTap={{ scale: 0.98 }}
-              href="https://wa.me/6281234567890"
+              href={`https://wa.me/${whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#7c3aed] hover:bg-[#6d28d9] text-sm font-bold text-white transition-all duration-300 shadow-lg shadow-[#7c3aed]/25 relative overflow-hidden group"
@@ -263,7 +275,7 @@ export default function Navbar() {
                 className="mt-6 pt-6 border-t border-white/5"
               >
                 <a
-                  href="https://wa.me/6281234567890"
+                  href={`https://wa.me/${whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full py-4.5 rounded-2xl bg-[#7c3aed] text-white font-bold text-sm shadow-xl shadow-[#7c3aed]/20 active:scale-[0.98] transition-all relative overflow-hidden group"

@@ -25,6 +25,7 @@ export default function SettingsManager() {
     whatsapp: '6281234567890',
     instagram: '',
     facebook: '',
+    tiktok: '',
     seoTitle: 'ChampionStore.id - Toko Item 8 Ball Pool Terpercaya',
     paymentQrisImageUrl: '',
     bankName: 'BCA',
@@ -250,7 +251,7 @@ export default function SettingsManager() {
             <h2 className="text-lg font-bold text-white">Social Media Links</h2>
           </div>
           <div className="p-6 space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-neutral-300">Instagram URL</label>
                 <input
@@ -258,6 +259,17 @@ export default function SettingsManager() {
                   value={settings.instagram}
                   onChange={(e) => setSettings({ ...settings, instagram: e.target.value })}
                   className="w-full bg-[#111] border border-neutral-800 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-neon-purple focus:ring-1 focus:ring-neon-purple"
+                  placeholder="https://instagram.com/username"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-300">TikTok URL</label>
+                <input
+                  type="url"
+                  value={settings.tiktok}
+                  onChange={(e) => setSettings({ ...settings, tiktok: e.target.value })}
+                  className="w-full bg-[#111] border border-neutral-800 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-neon-purple focus:ring-1 focus:ring-neon-purple"
+                  placeholder="https://tiktok.com/@username"
                 />
               </div>
               <div className="space-y-2">
@@ -267,6 +279,7 @@ export default function SettingsManager() {
                   value={settings.facebook}
                   onChange={(e) => setSettings({ ...settings, facebook: e.target.value })}
                   className="w-full bg-[#111] border border-neutral-800 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-neon-purple focus:ring-1 focus:ring-neon-purple"
+                  placeholder="https://facebook.com/username"
                 />
               </div>
             </div>
