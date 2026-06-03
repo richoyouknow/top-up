@@ -1,11 +1,40 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product } from '../data/products';
+
+export interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  originalPrice?: number | null;
+  description?: string | null;
+  imageUrl?: string;
+  stockStatus?: string;
+  featured?: boolean;
+  
+  // Legacy / mock data support fields
+  categoryLabel?: string;
+  benefits?: string[];
+  image?: string;
+  inStock?: boolean;
+}
 
 export interface CartItem {
   product: Product;
   quantity: number;
+}
+
+function getCategoryLabel(category: string): string {
+  const mapping: Record<string, string> = {
+    coins: 'Coins',
+    cash: 'Cash',
+    cues: 'Legendary Cue',
+    pieces: 'Cue Pieces',
+    events: 'Event Items',
+    bundles: 'Special Bundles',
+  };
+  return mapping[category.toLowerCase()] || category;
 }
 
 interface CartContextType {
@@ -50,8 +79,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addToCart = (product: Product, quantity: number = 1) => {
     if (quantity <= 0) return;
     
+    const normalizedProduct: Product = {
+      ...product,
+      categoryLabel: product.categoryLabel || getCategoryLabel(product.category),
+      imageUrl: product.imageUrl || product.image || '',
+      image: product.image || product.imageUrl || '',
+    };
+    
     setCartItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex((item) => item.product.id === product.id);
+      const existingItemIndex = prevItems.findIndex((item) => item.product.id === normalizedProduct.id);
       
       if (existingItemIndex > -1) {
         // Update quantity of existing item
@@ -63,7 +99,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return newItems;
       } else {
         // Add new item
-        return [...prevItems, { product, quantity }];
+        return [...prevItems, { product: normalizedProduct, quantity }];
       }
     });
   };
