@@ -78,7 +78,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Client
       )}
 
       {/* MAIN CONTAINER */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 overflow-hidden">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10 md:pt-32 relative z-10 overflow-hidden">
         
         {/* Breadcrumb Navigation */}
         <FadeIn direction="up">
