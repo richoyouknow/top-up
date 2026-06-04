@@ -13,7 +13,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "ChampionStore.id - Toko Item 8 Ball Pool Terpercaya & Murah",
   description: "Beli Coins, Cash, Legendary Cue, Cue Pieces, dan item premium 8 Ball Pool dengan harga terbaik, proses cepat, dan 100% aman.",
-  keywords: "8 ball pool, top up 8 ball pool, koin 8 ball pool, cash 8 ball pool, legendary cue, cue pieces, championstore.id",
+  keywords: "8 ball pool, top up 8 ball pool, koin 8 ball pool, cash 8 ball pool, legendary cue, cue pieces, championstore.id, championshop.id, beli koin 8 ball pool, top up murah",
 };
 
 export default function RootLayout({

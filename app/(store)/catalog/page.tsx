@@ -1,7 +1,13 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import CatalogClient from './CatalogClient';
 import { getProducts } from '@/app/actions/product';
 import { getCategories } from '@/app/actions/category';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Katalog Koin & Cash 8 Ball Pool - ChampionStore.id",
+  description: "Lihat katalog lengkap item premium 8 Ball Pool kami. Beli Koin Billiard, Cash, Legendary Cues, dan Cue Pieces harga termurah.",
+};
 
 export default async function Page() {
   // Fetch products and categories concurrently on the server side

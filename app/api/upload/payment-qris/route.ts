@@ -50,7 +50,9 @@ export async function POST(request: Request) {
     const filePath = path.join(uploadDir, fileName);
     await writeFile(filePath, buffer);
 
-    const publicUrl = `/uploads/payment/${fileName}`;
+    const origin = new URL(request.url).origin;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
+    const publicUrl = `${baseUrl}/uploads/payment/${fileName}`;
 
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
