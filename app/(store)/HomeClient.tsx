@@ -9,17 +9,11 @@ import {
   Coins, 
   Layers, 
   Gift, 
-  HelpCircle, 
-  ChevronDown, 
   Check, 
   ShoppingBag,
   Sparkles,
   MessageSquare,
   Award,
-  MousePointerClick,
-  ClipboardList,
-  Send,
-  Clock,
   ArrowRight,
   Package
 } from 'lucide-react';
@@ -60,136 +54,6 @@ type StoreProduct = {
   featured: boolean;
 };
 
-type HowToOrderItem = {
-  title: string;
-  desc: string;
-};
-
-type FaqItem = {
-  question: string;
-  answer: string;
-};
-
-type TestimonialItem = {
-  name: string;
-  date: string;
-  item: string;
-  review: string;
-  avatarText: string;
-};
-
-const DEFAULT_HOW_TO_ORDER: HowToOrderItem[] = [
-  { title: 'Pilih Produk', desc: 'Buka katalog lalu pilih item 8 Ball Pool yang ingin Anda beli.' },
-  { title: 'Masuk Keranjang', desc: 'Klik tombol beli pada produk agar item masuk ke keranjang belanja.' },
-  { title: 'Lanjut Checkout', desc: 'Dari halaman keranjang, klik lanjutkan ke checkout untuk proses pembayaran.' },
-  { title: 'Isi Data Pemesan', desc: 'Masukkan nama, nomor WhatsApp aktif, UID game, dan catatan bila perlu.' },
-  { title: 'Pilih Pembayaran', desc: 'Pilih QRIS atau transfer bank, lakukan pembayaran, lalu upload bukti transfer.' },
-  { title: 'Kirim Konfirmasi', desc: 'Klik kirim konfirmasi, lalu Anda otomatis diarahkan ke WhatsApp admin untuk verifikasi.' },
-];
-
-const DEFAULT_FAQS: FaqItem[] = [
-  {
-    question: 'Apakah pembelian item di sini aman dari resiko banned?',
-    answer:
-      'Ya, 100% aman. Kami menggunakan metode transfer koin teraman dan legal via Google Play untuk Cash. Kami juga memberikan garansi penuh untuk setiap transaksi Anda.'
-  },
-  {
-    question: 'Berapa lama waktu proses setelah pengiriman data?',
-    answer:
-      'Rata-rata waktu proses kami berkisar antara 5 sampai 15 menit setelah data pemesanan diterima admin kami di WhatsApp. Untuk paket cash sultan paling lambat adalah 30 menit.'
-  },
-  {
-    question: 'Apakah saya perlu memberikan login akun 8 Ball Pool saya?',
-    answer:
-      'Untuk koin (transfer koin), kami HANYA membutuhkan ID Unik (UID) akun Anda. Sedangkan untuk Top Up Cash atau suntik pieces tertentu, terkadang dibutuhkan detail login akun (Miniclip/Facebook/Google) demi kelancaran proses inject.'
-  },
-  {
-    question: 'Metode pembayaran apa saja yang didukung?',
-    answer:
-      'Pembayaran dilakukan dengan cara transfer manual yang akan dikonfirmasi langsung oleh admin via WhatsApp. Kami mendukung transfer Bank lokal (BCA, Mandiri, BRI, BNI), QRIS, Gopay, OVO, Dana, dan ShopeePay.'
-  }
-];
-
-const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
-  {
-    name: 'Muhammad Richo',
-    date: 'Kemarin',
-    review: 'Beli 1 Miliar Koin prosesnya super cepat, cuma nunggu 10 menit koin langsung masuk akun. Pelayanannya ramah banget, recommended seller!',
-    avatarText: 'MR',
-    item: '1 Billion Coins'
-  },
-  {
-    name: 'Ahmad Fauzi',
-    date: '2 hari lalu',
-    review: 'Awalnya ragu beli Archangel Cue pieces di sini. Ternyata transaksinya sangat aman dan dipandu admin step-by-step. Keren store ini!',
-    avatarText: 'AF',
-    item: 'Archangel Pieces'
-  },
-  {
-    name: 'Christian Wijaya',
-    date: '5 hari lalu',
-    review: 'Top up 5.000 cash sukses masuk akun tanpa kendala. Buka legendary boxes langsung unlock 2 cue baru. Terima kasih ChampionStore!',
-    avatarText: 'CW',
-    item: '5.000 Cash'
-  }
-];
-
-function parseJsonSafely<T>(input: string | undefined, fallback: T): T {
-  if (!input) return fallback;
-  try {
-    return JSON.parse(input) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-function normalizeHowToOrder(input: unknown[]): HowToOrderItem[] {
-  if (!Array.isArray(input)) return [];
-  return input
-    .map((entry) => {
-      if (typeof entry === 'string') {
-        return { title: 'Langkah', desc: entry };
-      }
-      const obj = entry as Partial<HowToOrderItem>;
-      if (typeof obj.title === 'string' && typeof obj.desc === 'string') {
-        return { title: obj.title, desc: obj.desc };
-      }
-      return null;
-    })
-    .filter((entry): entry is HowToOrderItem => Boolean(entry));
-}
-
-function normalizeFaqs(input: unknown[]): FaqItem[] {
-  if (!Array.isArray(input)) return [];
-  return input
-    .map((entry) => {
-      const obj = entry as Partial<FaqItem> & { q?: string; a?: string };
-      const question = typeof obj.question === 'string' ? obj.question : typeof obj.q === 'string' ? obj.q : '';
-      const answer = typeof obj.answer === 'string' ? obj.answer : typeof obj.a === 'string' ? obj.a : '';
-      if (!question || !answer) return null;
-      return { question, answer };
-    })
-    .filter((entry): entry is FaqItem => Boolean(entry));
-}
-
-function normalizeTestimonials(input: unknown[]): TestimonialItem[] {
-  if (!Array.isArray(input)) return [];
-  return input
-    .map((entry) => {
-      const obj = entry as Partial<TestimonialItem> & { content?: string };
-      const review = typeof obj.review === 'string' ? obj.review : typeof obj.content === 'string' ? obj.content : '';
-      if (!obj.name || !review) return null;
-      return {
-        name: obj.name,
-        review,
-        date: obj.date || 'Baru saja',
-        item: obj.item || 'Pembelian item',
-        avatarText: obj.avatarText || obj.name.slice(0, 2).toUpperCase(),
-      };
-    })
-    .filter((entry): entry is TestimonialItem => Boolean(entry));
-}
-
 interface HomeClientProps {
   initialProducts: StoreProduct[];
   initialSettings: Record<string, string>;
@@ -198,7 +62,6 @@ interface HomeClientProps {
 
 export default function HomeClient({ initialProducts, initialSettings, initialCategories }: HomeClientProps) {
   const { addToCart } = useCart();
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [swapped, setSwapped] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -208,15 +71,13 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
     setIsMobile(window.innerWidth < 768 || (typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)));
   }, []);
 
-  const bestSellers = initialProducts.filter(product => product.featured).slice(0, 4);
+  // Derived values from settings and products
+  const bestSellers = Array.isArray(initialProducts) ? initialProducts.filter(p => p.featured).slice(0, 4) : [];
 
-  const heroBadgeText = initialSettings.hero_badgeText || initialSettings.heroBadgeText || 'Toko Koin & Cues Terpercaya No. 1';
-  const heroTitle = initialSettings.hero_title || initialSettings.heroTitle || 'Jual Item 8 Ball Pool Terpercaya';
-  const heroSubtitle =
-    initialSettings.hero_subtitle ||
-    initialSettings.heroSubtitle ||
-    'Dapatkan Coins, Cash, Legendary Cue, Cue Pieces, dan item premium 8 Ball Pool dengan harga terbaik and proses secepat kilat.';
-  const heroButtonText = initialSettings.hero_buttonText || initialSettings.heroButtonText || 'Lihat Produk';
+  const heroBadgeText = (initialSettings && (initialSettings.hero_badgeText || initialSettings.heroBadgeText)) || 'Toko Koin & Cues Terpercaya No. 1';
+  const heroTitle = (initialSettings && (initialSettings.hero_title || initialSettings.heroTitle)) || 'Jual Item 8 Ball Pool Terpercaya';
+  const heroSubtitle = (initialSettings && (initialSettings.hero_subtitle || initialSettings.heroSubtitle)) || 'Dapatkan Coins, Cash, Legendary Cue, Cue Pieces, dan item premium 8 Ball Pool dengan harga terbaik dan proses secepat kilat.';
+  const heroButtonText = (initialSettings && (initialSettings.hero_buttonText || initialSettings.heroButtonText)) || 'Lihat Produk';
 
   const getSafeImageSrc = (src?: string | null, fallback = '/hero-cues.png') => {
     const value = (src ?? '').trim();
@@ -225,24 +86,6 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
     if (value.startsWith('http://') || value.startsWith('https://')) return value;
     return `/${value.replace(/^\.?\//, '')}`;
   };
-
-  const howToOrderSteps = (() => {
-    const parsed = parseJsonSafely<unknown[]>(initialSettings.how_to_order, DEFAULT_HOW_TO_ORDER);
-    const normalized = normalizeHowToOrder(parsed);
-    return normalized.length > 0 ? normalized : DEFAULT_HOW_TO_ORDER;
-  })();
-
-  const faqItems = (() => {
-    const parsed = parseJsonSafely<unknown[]>(initialSettings.faqs, DEFAULT_FAQS);
-    const normalized = normalizeFaqs(parsed);
-    return normalized.length > 0 ? normalized : DEFAULT_FAQS;
-  })();
-
-  const testimonialItems = (() => {
-    const parsed = parseJsonSafely<unknown[]>(initialSettings.testimonials, DEFAULT_TESTIMONIALS);
-    const normalized = normalizeTestimonials(parsed);
-    return normalized.length > 0 ? normalized : DEFAULT_TESTIMONIALS;
-  })();
 
   const getCategoryIcon = (slug: string) => {
     const s = slug.toLowerCase();
@@ -280,10 +123,6 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
     setTimeout(() => {
       setSuccessToast(null);
     }, 3000);
-  };
-
-  const toggleFaq = (index: number) => {
-    setActiveFaq(activeFaq === index ? null : index);
   };
 
   const toggleSwap = () => setSwapped((prev) => !prev);
@@ -386,6 +225,7 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 src={getSafeImageSrc(initialSettings.hero_image2_url, '/cues/firestorm.png')}
                 alt="Hero Card 2"
                 fill
+                loading="lazy"
                 sizes="(max-width: 768px) 280px, 380px"
                 style={{ objectFit: 'cover' }}
                 className="z-0 transition-transform duration-500 rounded-3xl"
@@ -506,6 +346,7 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                     alt={product.name}
                     width={160}
                     height={90}
+                    loading="lazy"
                     style={{ objectFit: 'contain' }}
                     className="scale-95 group-hover:scale-100 transition-transform duration-500"
                   />
@@ -623,167 +464,6 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
           </div>
         </FadeIn>
       </section>
-
-      {/* HOW TO ORDER SECTION */}
-      <section id="cara-order" className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-dark-purple/30 scroll-mt-[72px]">
-        <FadeIn direction="up">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-purple/10 border border-neon-purple/20 mb-4">
-              <span className="text-[10px] font-bold text-neon-purple uppercase tracking-widest">Tutorial Belanja</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-4">Cara Mudah Memesan</h2>
-            <p className="text-gray-text text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-              Dapatkan item 8 Ball Pool impian Anda hanya dalam hitungan menit dengan mengikuti {howToOrderSteps.length} langkah praktis di bawah ini.
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Connecting Line (Desktop) */}
-            <div className="hidden xl:block absolute top-[44px] left-[8%] right-[8%] h-[2px] bg-gradient-to-r from-transparent via-dark-purple to-transparent z-0"></div>
-
-            {/* Grouped steps to cut 6 scroll trackers down to 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-8 xl:gap-4 relative z-10">
-              {howToOrderSteps.map((stepObj, idx, arr) => {
-                const stepNumber = String(idx + 1);
-                const stepIcons = [MousePointerClick, ShoppingBag, ArrowRight, ClipboardList, ShieldCheck, Send];
-                const IconComponent = stepIcons[idx % stepIcons.length];
-
-                return (
-                  <div key={`${stepObj.title}-${idx}`} className="flex flex-col items-center text-center gap-5 group relative">
-                    <div className="relative">
-                      {/* Step Number Circle */}
-                      <div className="flex items-center justify-center w-22 h-22 rounded-2xl border-2 border-dark-purple bg-[#13111b] group-hover:border-neon-purple group-hover:shadow-[0_0_20px_rgba(157,78,221,0.2)] transition-all duration-500 relative z-10 overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <IconComponent className="w-9 h-9 text-gray-text group-hover:text-neon-purple transition-all duration-500 transform group-hover:scale-110" />
-
-                        {/* Mobile Step Badge */}
-                        <div className="absolute -top-1 -right-1 w-7 h-7 rounded-lg bg-neon-purple flex items-center justify-center text-[11px] font-black text-white shadow-lg xl:hidden">
-                          {stepNumber}
-                        </div>
-                      </div>
-
-                      {/* Desktop Step Badge (Centered below) */}
-                      <div className="hidden xl:flex absolute -bottom-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#13111b] border-2 border-dark-purple items-center justify-center text-[12px] font-black text-white group-hover:border-neon-purple transition-colors duration-500 z-20">
-                        {stepNumber}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2 mt-4">
-                      <h3 className="text-lg font-bold text-white group-hover:text-neon-purple transition-colors duration-300">
-                        {stepObj.title}
-                      </h3>
-                      <p className="text-gray-text text-xs leading-relaxed max-w-[22ch] mx-auto group-hover:text-white/80 transition-colors duration-300">
-                        {stepObj.desc}
-                      </p>
-                    </div>
-
-                    {/* Desktop Arrows */}
-                    {idx < arr.length - 1 && (
-                      <div className="hidden xl:flex absolute top-[44px] -right-[15%] translate-x-1/2 items-center justify-center w-8 h-8 text-dark-purple group-hover:text-neon-purple transition-colors duration-500 z-0">
-                        <ArrowRight className="w-5 h-5" />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* Pro Tip Box */}
-        <FadeIn delay={0.2} direction="up">
-          <div className="mt-16 max-w-3xl mx-auto p-6 rounded-2xl border border-neon-purple/20 bg-neon-purple/5 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neon-purple/20 text-neon-purple">
-              <Clock className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white mb-1">Pro Tip: Gunakan QRIS untuk Proses Tercepat</h4>
-              <p className="text-[11px] text-gray-text leading-relaxed">
-                Pembayaran via QRIS terverifikasi secara otomatis oleh sistem kami, sehingga admin dapat memproses koin atau cash Anda jauh lebih cepat dibandingkan transfer manual.
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* CUSTOMER TESTIMONIALS SECTION */}
-      <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-dark-purple/30">
-        <FadeIn direction="up">
-          <div className="text-center mb-12">
-            <div className="text-[9px] font-bold text-neon-purple uppercase tracking-widest mb-1">Ulasan Pelanggan</div>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-3">Apa Kata Gamers?</h2>
-            <p className="text-gray-text text-xs md:text-sm max-w-md mx-auto leading-relaxed">
-              Kepuasan pelanggan adalah motivasi terbesar bagi kami. Berikut ulasan nyata dari pembeli setia kami.
-            </p>
-          </div>
-
-          {/* Grouped testimonial cards under 1 observer to avoid viewport paint calls on mobile scroll */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonialItems.map((test, index) => (
-              <div key={index} className="premium-card rounded-xl p-5 flex flex-col gap-4 text-left h-full">
-                <p className="text-gray-text text-[11px] leading-relaxed italic flex-1">
-                  &ldquo;{test.review}&rdquo;
-                </p>
-
-                <div className="h-px bg-dark-purple/35"></div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neon-purple/10 border border-dark-purple text-[11px] font-extrabold text-white">
-                    {test.avatarText}
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-bold text-white">{test.name}</span>
-                    <span className="text-[9px] text-gray-text uppercase tracking-wider font-semibold">
-                      Beli: {test.item} &bull; {test.date}
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-            ))}
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section id="faq" className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6 py-16 border-t border-dark-purple/30 scroll-mt-[72px]">
-        <FadeIn direction="up" fullWidth>
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-3 flex items-center justify-center gap-2">
-              <HelpCircle className="w-6 h-6 text-neon-purple" />
-              Frequently Asked Questions
-            </h2>
-            <p className="text-gray-text text-xs md:text-sm leading-relaxed">
-              Temukan jawaban cepat untuk beberapa pertanyaan umum mengenai toko dan pemesanan kami.
-            </p>
-          </div>
-
-          {/* Grouped accordions to replace 4 independent scroll observers with 1 */}
-          <div className="flex flex-col gap-3.5">
-            {faqItems.map((faq, index) => {
-              const isOpen = activeFaq === index;
-              return (
-                <div key={index} className="premium-card rounded-xl overflow-hidden border-dark-purple/35 w-full">
-                  <button
-                    onClick={() => toggleFaq(index)}
-                    className="flex items-center justify-between w-full p-4.5 text-left text-xs md:text-sm font-semibold text-white focus:outline-none cursor-pointer"
-                  >
-                    <span>{faq.question}</span>
-                    <ChevronDown className={`w-4 h-4 text-neon-purple transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  
-                  {isOpen && (
-                    <div className="px-4.5 pb-4.5 pt-0.5 border-t border-t-dark-purple/20 text-[11px] text-gray-text leading-relaxed bg-[#09080e]/40 animate-in fade-in duration-200 text-left">
-                      {faq.answer}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </FadeIn>
-      </section>
-
     </div>
   );
 }
