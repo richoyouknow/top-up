@@ -233,7 +233,6 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 loading="lazy"
                 sizes="(max-width: 768px) 280px, 380px"
                 style={{ objectFit: 'cover' }}
-                loading="lazy"
                 onLoad={() => setImage2Loaded(true)}
                 className={`z-0 rounded-3xl transition-opacity duration-300 ${
                   image2Loaded ? 'opacity-100' : 'opacity-0'
