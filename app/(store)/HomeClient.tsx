@@ -342,9 +342,9 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
           </div>
 
           {/* Grouped all bestseller products under a single FadeIn component to reduce scroll tracking overhead */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {bestSellers.map((product) => (
-              <div key={product.id} className="premium-card premium-card-hover rounded-xl overflow-hidden p-4 flex flex-col gap-4 group h-full">
+              <div key={product.id} className="premium-card premium-card-hover rounded-xl overflow-hidden p-3 sm:p-4 flex flex-col gap-3.5 sm:gap-4 group h-full">
                 {/* Product Thumbnail */}
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35 flex items-center justify-center p-2">
                   <Image
@@ -379,7 +379,7 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 </div>
 
                 {/* Price and Action Row */}
-                <div className="flex items-center justify-between pt-3.5 border-t border-dark-purple/35 mt-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3.5 border-t border-dark-purple/35 mt-auto">
                   <div className="flex flex-col text-left">
                     {product.originalPrice && (
                       <span className="text-[9px] text-gray-text line-through mb-0.5">
@@ -393,7 +393,7 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
 
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="flex items-center gap-1 px-3.5 py-2 rounded-lg bg-neon-purple hover:bg-violet text-[11px] font-bold text-white transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="flex items-center justify-center gap-1 py-2 px-3 sm:px-3.5 rounded-lg bg-neon-purple hover:bg-violet text-[11px] font-bold text-white transition-all duration-200 active:scale-95 cursor-pointer w-full sm:w-auto"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
                     Beli

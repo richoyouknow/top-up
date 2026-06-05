@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, ShoppingBag, Check, ArrowLeft, Plus, Minus } from 'lucide-react';
+import { Search, ShoppingBag, Check, ArrowLeft, ArrowRight, Plus, Minus } from 'lucide-react';
 import FadeIn from '@/app/components/FadeIn';
 import { useCart } from '@/app/context/cart-context';
 
@@ -23,6 +23,13 @@ export default function CatalogClient({ initialProducts, initialCategories }: Ca
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [successToast, setSuccessToast] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
 
   // Pre-filter category if present in query params
   useEffect(() => {
@@ -64,6 +71,10 @@ export default function CatalogClient({ initialProducts, initialCategories }: Ca
     })();
     return matchesSearch && matchesCategory;
   });
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handleQuantityChange = (productId: string, val: number) => {
     if (val < 1) return;
@@ -173,11 +184,11 @@ export default function CatalogClient({ initialProducts, initialCategories }: Ca
       {filteredProducts.length > 0 ? (
         <FadeIn direction="up" delay={0.2}>
           {/* Grouped all filtered cards into one FadeIn block to avoid Intersection Observer layout thrashing */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+            {paginatedProducts.map((product) => {
               const qty = quantities[product.id] || 1;
               return (
-                <div key={product.id} className="premium-card premium-card-hover rounded-xl overflow-hidden p-4 flex flex-col gap-4 group h-full">
+                <div key={product.id} className="premium-card premium-card-hover rounded-xl overflow-hidden p-3 sm:p-4 flex flex-col gap-3.5 sm:gap-4 group h-full">
                   
                   {/* Product Image Frame */}
                   <div className="relative aspect-video rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35 flex items-center justify-center p-2">
@@ -239,8 +250,8 @@ export default function CatalogClient({ initialProducts, initialCategories }: Ca
                   </div>
 
                   {/* QUANTITY MODIFIER & ADD BUTTON ROW */}
-                  <div className="flex items-center gap-2 pt-3.5 border-t border-dark-purple/35 mt-auto">
-                    <div className="flex items-center rounded-lg bg-[#09080e] border border-dark-purple p-1">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-3 border-t border-dark-purple/35 mt-auto">
+                    <div className="flex items-center justify-between sm:justify-start rounded-lg bg-[#09080e] border border-dark-purple p-1 w-full sm:w-auto">
                       <button
                         onClick={() => handleQuantityChange(product.id, qty - 1)}
                         className="p-1 text-gray-text hover:text-white rounded focus:outline-none cursor-pointer disabled:opacity-50"
@@ -276,6 +287,61 @@ export default function CatalogClient({ initialProducts, initialCategories }: Ca
               );
             })}
           </div>
+
+          {/* PAGINATION CONTROLS */}
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-10 pt-6 border-t border-dark-purple/30">
+              <p className="text-xs text-gray-text font-medium">
+                Menampilkan <span className="text-white font-bold">{startIndex + 1}</span> - <span className="text-white font-bold">{Math.min(startIndex + ITEMS_PER_PAGE, filteredProducts.length)}</span> dari <span className="text-white font-bold">{filteredProducts.length}</span> produk
+              </p>
+              
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => {
+                    setCurrentPage(prev => Math.max(prev - 1, 1));
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  disabled={currentPage === 1}
+                  className="flex items-center justify-center h-9 w-9 rounded-lg bg-[#13111b] border border-dark-purple text-gray-text hover:text-white hover:border-neon-purple disabled:opacity-40 disabled:hover:text-gray-text disabled:hover:border-dark-purple transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Halaman sebelumnya"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  const isActive = currentPage === page;
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => {
+                        setCurrentPage(page);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className={`flex items-center justify-center h-9 w-9 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                        isActive 
+                          ? 'bg-neon-purple border border-neon-purple text-white shadow-[0_0_15px_rgba(157,78,221,0.4)]' 
+                          : 'bg-[#13111b] border border-dark-purple text-gray-text hover:text-white hover:border-neutral-700/60'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => {
+                    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  disabled={currentPage === totalPages}
+                  className="flex items-center justify-center h-9 w-9 rounded-lg bg-[#13111b] border border-dark-purple text-gray-text hover:text-white hover:border-neon-purple disabled:opacity-40 disabled:hover:text-gray-text disabled:hover:border-dark-purple transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Halaman berikutnya"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </FadeIn>
       ) : (
         /* Empty Search/Filter Results */

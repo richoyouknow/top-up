@@ -86,6 +86,42 @@ export const PRODUCTS: Product[] = [
     inStock: false,
     isBestSeller: false
   },
+  {
+    id: 'coins-2b',
+    name: '2 Billion Coins',
+    category: 'coins',
+    categoryLabel: 'Coins',
+    description: 'Koin 8 Ball Pool sebesar 2 Miliar (2 Billion). Sangat cocok untuk mengamankan posisi Anda di liga tertinggi.',
+    benefits: [
+      'Proses transfer koin cepat dan aman (15-20 menit)',
+      'Garansi aman tanpa resiko banned',
+      'Gratis bonus tips dan trik bermain aman dari admin',
+      'Stok selalu tersedia 24/7'
+    ],
+    price: 175000,
+    originalPrice: 240000,
+    image: '/coins.png',
+    inStock: true,
+    isBestSeller: false
+  },
+  {
+    id: 'coins-10b',
+    name: '10 Billion Coins',
+    category: 'coins',
+    categoryLabel: 'Coins',
+    description: 'Koin 8 Ball Pool sebesar 10 Miliar. Paket Sultan Koin terbesar untuk dominasi mutlak di semua meja taruhan.',
+    benefits: [
+      'Proses transfer koin prioritas utama',
+      'Garansi full recovery jika terjadi kendala',
+      'Bonus tips cara mengelola koin agar awet',
+      'Layanan pelanggan VIP 24/7'
+    ],
+    price: 780000,
+    originalPrice: 1000000,
+    image: '/coins.png',
+    inStock: true,
+    isBestSeller: false
+  },
 
   // CASH CATEGORY
   {
@@ -138,6 +174,24 @@ export const PRODUCTS: Product[] = [
     ],
     price: 280000,
     originalPrice: 380000,
+    image: '/cash.png',
+    inStock: true,
+    isBestSeller: false
+  },
+  {
+    id: 'cash-2k',
+    name: '2.000 Cash',
+    category: 'cash',
+    categoryLabel: 'Cash',
+    description: 'Cash 8 Ball Pool sebanyak 2.000 untuk membeli box legendaris, cue premium, dan item kustomisasi lainnya.',
+    benefits: [
+      'Top up via login akun yang sangat aman',
+      'Proses cepat maksimal 20-30 menit',
+      '100% legal dan bersumber resmi',
+      'Sangat direkomendasikan untuk menaikkan level VIP'
+    ],
+    price: 68000,
+    originalPrice: 90000,
     image: '/cash.png',
     inStock: true,
     isBestSeller: false
@@ -198,6 +252,24 @@ export const PRODUCTS: Product[] = [
     inStock: true,
     isBestSeller: false
   },
+  {
+    id: 'cue-excalibur',
+    name: 'Excalibur Legendary Cue',
+    category: 'cues',
+    categoryLabel: 'Legendary Cue',
+    description: 'Cue Legendaris Excalibur dengan stat penuh dan aura pedang suci yang memukau setiap lawan.',
+    benefits: [
+      'Statistik Force, Aim, Spin, dan Time maksimal',
+      'Meningkatkan perolehan koin setiap kemenangan',
+      'Bebas biaya isi ulang (Recharge) selamanya',
+      'Efek pukulan pedang cahaya yang legendaris'
+    ],
+    price: 130000,
+    originalPrice: 190000,
+    image: '/cue-archangel.png',
+    inStock: true,
+    isBestSeller: false
+  },
 
   // CUE PIECES CATEGORY
   {
@@ -232,6 +304,24 @@ export const PRODUCTS: Product[] = [
     ],
     price: 30000,
     originalPrice: 45000,
+    image: '/cue-pieces.png',
+    inStock: true,
+    isBestSeller: false
+  },
+  {
+    id: 'cue-pieces-valkyrie',
+    name: 'Valkyrie Pieces Bundle x10',
+    category: 'pieces',
+    categoryLabel: 'Cue Pieces',
+    description: 'Kumpulan 10 kepingan (Pieces) untuk meng-unlock atau menaikkan level Valkyrie Cue Anda.',
+    benefits: [
+      'Proses cepat langsung masuk ke akun',
+      'Membantu meningkatkan level cue Valkyrie secara instan',
+      'Aman tanpa resiko banned',
+      'Harga promo hemat untuk upgrade cue'
+    ],
+    price: 35000,
+    originalPrice: 50000,
     image: '/cue-pieces.png',
     inStock: true,
     isBestSeller: false
@@ -308,6 +398,24 @@ export const PRODUCTS: Product[] = [
     ],
     price: 300000,
     originalPrice: 450000,
+    image: '/special-bundle.png',
+    inStock: true,
+    isBestSeller: true
+  },
+  {
+    id: 'bundle-sultan',
+    name: 'Sultan Ultimate Pack',
+    category: 'bundles',
+    categoryLabel: 'Special Bundles',
+    description: 'Paket Sultan terlengkap dan termewah untuk pemain profesional. Gabungan koin, cash, dan kepingan cue legendaris.',
+    benefits: [
+      'Berisi: 3 Miliar Koin + 3.000 Cash + 20x Random Pieces',
+      'Hemat lebih dari 50% dibanding membeli satuan',
+      'Proses cepat dan diprioritaskan oleh admin',
+      'Status VIP prioritas di WhatsApp admin'
+    ],
+    price: 450000,
+    originalPrice: 650000,
     image: '/special-bundle.png',
     inStock: true,
     isBestSeller: true

@@ -285,10 +285,10 @@ export default function ProductDetailClient({ product, relatedProducts }: Client
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {relatedProducts.map((p, idx) => (
               <FadeIn key={p.id} delay={0.1 * idx} direction="up" fullWidth>
-                <div className="premium-card premium-card-hover rounded-xl overflow-hidden p-4 flex flex-col gap-4 group h-full">
+                <div className="premium-card premium-card-hover rounded-xl overflow-hidden p-3 sm:p-4 flex flex-col gap-3.5 sm:gap-4 group h-full">
                   
                   {/* Related product image */}
                   <div className="relative aspect-video rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35 flex items-center justify-center p-2">
@@ -319,14 +319,14 @@ export default function ProductDetailClient({ product, relatedProducts }: Client
                   </div>
 
                   {/* Pricing & quick button */}
-                  <div className="flex items-center justify-between pt-3.5 border-t border-dark-purple/35 mt-auto">
-                    <span className="text-sm font-extrabold text-white">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3.5 border-t border-dark-purple/35 mt-auto">
+                    <span className="text-sm font-extrabold text-white text-left">
                       Rp{p.price.toLocaleString('id-ID')}
                     </span>
 
                     <Link
                       href={`/product/${p.id}`}
-                      className="px-4 py-2 rounded bg-[#13111b] border border-dark-purple text-[10px] font-bold text-white hover:border-neutral-700/60 transition-all duration-200"
+                      className="w-full sm:w-auto text-center px-4 py-2 rounded bg-[#13111b] border border-dark-purple text-[10px] font-bold text-white hover:border-neutral-700/60 transition-all duration-200"
                     >
                       Detail
                     </Link>
