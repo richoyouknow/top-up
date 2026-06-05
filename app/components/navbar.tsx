@@ -239,19 +239,14 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
             className="md:hidden border-t border-white/5 bg-[#09080e]/95 backdrop-blur-2xl overflow-hidden shadow-2xl"
           >
             <div className="px-4 py-8 flex flex-col gap-2">
-              {navLinks.map((link, i) => {
+              {navLinks.map((link) => {
                 const isActive = activePath === link.href;
                 return (
-                  <motion.div
-                    key={link.name}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: i * 0.05 + 0.1 }}
-                  >
+                  <div key={link.name}>
                     <Link
                       href={link.href}
                       onClick={(e) => handleLinkClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, link.href)}
@@ -264,16 +259,11 @@ export default function Navbar() {
                       <span className="font-bold text-base tracking-tight">{link.name}</span>
                       <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'translate-x-1 opacity-100' : 'opacity-0 -translate-x-2'}`} />
                     </Link>
-                  </motion.div>
+                  </div>
                 );
               })}
               
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 + 0.2 }}
-                className="mt-6 pt-6 border-t border-white/5"
-              >
+              <div className="mt-6 pt-6 border-t border-white/5">
                 <a
                   href={`https://wa.me/${whatsapp}`}
                   target="_blank"
@@ -284,7 +274,7 @@ export default function Navbar() {
                   <MessageSquare className="w-5 h-5" />
                   Hubungi Admin WhatsApp
                 </a>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         )}

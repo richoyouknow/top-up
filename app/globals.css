@@ -97,3 +97,15 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Optimization: Disable animations and transitions on mobile preview for performance */
+@media (max-width: 768px) {
+  .no-mobile-animate,
+  .no-mobile-animate * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+

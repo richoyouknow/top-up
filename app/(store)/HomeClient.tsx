@@ -41,11 +41,11 @@ const itemVariants = {
 };
 
 const cardsVariants = {
-  hidden: { opacity: 0, x: 50 },
+  hidden: { opacity: 0, x: 25 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.8, ease: 'easeOut', staggerChildren: 0.3 } as Transition,
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.1 } as Transition,
   },
 };
 
@@ -202,6 +202,8 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [swapped, setSwapped] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [image1Loaded, setImage1Loaded] = useState(false);
+  const [image2Loaded, setImage2Loaded] = useState(false);
 
   // Evaluate isMobile ONCE on mount to avoid layout calculation overhead on continuous resize events
   useEffect(() => {
@@ -319,7 +321,7 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
           variants={containerVariants}
         >
           {/* Left: Text Content */}
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left lg:w-1/2">
+          <div className="no-mobile-animate flex flex-col items-center text-center lg:items-start lg:text-left lg:w-1/2">
             
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#13111b]/80 backdrop-blur-sm border border-neon-purple/40 w-max mb-6 shadow-[0_0_15px_rgba(157,78,221,0.2)]">
               <Sparkles className="w-4 h-4 text-cyan-glow" />
@@ -365,20 +367,23 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
           {/* Right: Floating Cards */}
           <motion.div
             className="relative lg:w-1/2 h-full min-h-[400px] md:min-h-[500px] w-full flex items-center justify-center mt-10 lg:mt-0"
-            variants={cardsVariants}
+            variants={
+              isMobile
+                ? {
+                    hidden: { opacity: 1, x: 0 },
+                    visible: { opacity: 1, x: 0 },
+                  }
+                : cardsVariants
+            }
           >
             {/* Card 2 (Previously Back) */}
-            <motion.div
+            <div
               onClick={toggleSwap}
-              animate={{
-                zIndex: swapped ? 30 : 10,
-                x: swapped ? (isMobile ? -20 : -40) : (isMobile ? 40 : 80),
-                rotate: swapped ? 6 : -8,
-                scale: swapped ? 1.05 : 0.85,
-              }}
-              whileHover={isMobile ? undefined : { y: -15, transition: { duration: 0.3, ease: "easeOut" } }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="absolute h-[280px] md:h-[380px] w-[280px] md:w-[380px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-dark-purple/70 bg-gradient-to-b from-[#1a1725] to-[#09080e] overflow-hidden group flex items-center justify-center cursor-pointer select-none"
+              className={`absolute h-[280px] md:h-[380px] w-[280px] md:w-[380px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-dark-purple/70 bg-gradient-to-b from-[#1a1725] to-[#09080e] overflow-hidden group flex items-center justify-center cursor-pointer select-none transition-all duration-300 ease-out hover:-translate-y-2 md:hover:-translate-y-4 ${
+                swapped
+                  ? 'translate-x-[-20px] rotate-[6deg] scale-[1.05] z-30 md:translate-x-[-40px]'
+                  : 'translate-x-[40px] rotate-[-8deg] scale-[0.85] z-10 md:translate-x-[80px]'
+              }`}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-[#09080e] via-transparent to-transparent z-10 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
@@ -388,7 +393,11 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 fill
                 sizes="(max-width: 768px) 280px, 380px"
                 style={{ objectFit: 'cover' }}
-                className="z-0 transition-transform duration-500 rounded-3xl"
+                loading="lazy"
+                onLoad={() => setImage2Loaded(true)}
+                className={`z-0 rounded-3xl transition-opacity duration-300 ${
+                  image2Loaded ? 'opacity-100' : 'opacity-0'
+                }`}
               />
               <div className="absolute bottom-5 left-5 z-20 flex flex-col pointer-events-none">
                 <span className="text-sm font-black tracking-widest text-white uppercase drop-shadow-lg">
@@ -398,20 +407,16 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
               {swapped && (
                 <div className="absolute top-4 right-4 h-2.5 w-2.5 rounded-full bg-cyan-glow animate-pulse shadow-[0_0_12px_#00E5FF] pointer-events-none"></div>
               )}
-            </motion.div>
+            </div>
             
             {/* Card 1 (Previously Front) */}
-            <motion.div
+            <div
               onClick={toggleSwap}
-              animate={{
-                zIndex: swapped ? 10 : 30,
-                x: swapped ? (isMobile ? 40 : 80) : (isMobile ? -20 : -40),
-                rotate: swapped ? -8 : 6,
-                scale: swapped ? 0.85 : 1.05,
-              }}
-              whileHover={isMobile ? undefined : { y: -15, transition: { duration: 0.3, ease: "easeOut" } }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="absolute h-[280px] md:h-[380px] w-[280px] md:w-[380px] rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-neon-purple/40 bg-gradient-to-b from-[#1f1935] to-[#0d0a14] overflow-hidden group flex items-center justify-center cursor-pointer select-none"
+              className={`absolute h-[280px] md:h-[380px] w-[280px] md:w-[380px] rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-neon-purple/40 bg-gradient-to-b from-[#1f1935] to-[#0d0a14] overflow-hidden group flex items-center justify-center cursor-pointer select-none transition-all duration-300 ease-out hover:-translate-y-2 md:hover:-translate-y-4 ${
+                swapped
+                  ? 'translate-x-[40px] rotate-[-8deg] scale-[0.85] z-10 md:translate-x-[80px]'
+                  : 'translate-x-[-20px] rotate-[6deg] scale-[1.05] z-30 md:translate-x-[-40px]'
+              }`}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-neon-purple/30 via-[#0d0a14]/60 to-transparent z-10 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
@@ -422,7 +427,10 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 priority
                 sizes="(max-width: 768px) 280px, 380px"
                 style={{ objectFit: 'cover' }}
-                className="z-0 transition-transform duration-500 rounded-3xl drop-shadow-[0_0_15px_rgba(157,78,221,0.4)]"
+                onLoad={() => setImage1Loaded(true)}
+                className={`z-0 rounded-3xl drop-shadow-[0_0_15px_rgba(157,78,221,0.4)] transition-opacity duration-300 ${
+                  image1Loaded ? 'opacity-100' : 'opacity-0'
+                }`}
               />
               <div className="absolute bottom-5 left-5 z-20 flex flex-col pointer-events-none">
                 <span className="text-[9px] font-bold text-cyan-glow uppercase tracking-wider mb-0.5 drop-shadow-md">
@@ -435,9 +443,8 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
               {!swapped && (
                 <div className="absolute top-4 right-4 h-2.5 w-2.5 rounded-full bg-cyan-glow animate-pulse shadow-[0_0_12px_#00E5FF] pointer-events-none"></div>
               )}
-            </motion.div>
+            </div>
           </motion.div>
-
         </motion.div>
       </section>
 
