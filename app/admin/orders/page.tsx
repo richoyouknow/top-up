@@ -80,7 +80,7 @@ export default function OrdersManager() {
     
     // Convert old full URLs from championshop.id to relative paths for dev/prod compatibility
     if (value.includes('championshop.id/uploads/')) {
-      return '/' + value.split('championshop.id/uploads/')[1];
+      return '/uploads/' + value.split('championshop.id/uploads/')[1];
     }
     
     if (value.startsWith('http://') || value.startsWith('https://')) return value;
