@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
         hostname: 'championshop.id',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        pathname: '/**',
+      },
     ],
     // Optimize image delivery
     formats: ['image/avif', 'image/webp'],

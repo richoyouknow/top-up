@@ -31,8 +31,13 @@ export default function ProductDetailClient({ product, relatedProducts }: Client
 
   const getSafeImageSrc = (src?: string | null) => {
     const value = (src ?? '').trim();
-
     if (!value) return '/hero-cues.png';
+    
+    // Convert old full URLs from championshop.id to relative paths for dev/prod compatibility
+    if (value.includes('championshop.id/uploads/')) {
+      return '/' + value.split('championshop.id/uploads/')[1];
+    }
+    
     if (value.startsWith('/')) return value;
     if (value.startsWith('http://') || value.startsWith('https://')) return value;
 
@@ -290,15 +295,14 @@ export default function ProductDetailClient({ product, relatedProducts }: Client
               <FadeIn key={p.id} delay={0.1 * idx} direction="up" fullWidth>
                 <div className="premium-card premium-card-hover rounded-xl overflow-hidden p-3 sm:p-4 flex flex-col gap-3.5 sm:gap-4 group h-full">
                   
-                  {/* Related product image */}
-                  <div className="relative aspect-video rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35 flex items-center justify-center p-2">
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35">
                     <Image
                       src={getSafeImageSrc(p.imageUrl)}
                       alt={p.name}
-                      width={160}
-                      height={90}
-                      style={{ objectFit: 'contain' }}
-                      className="scale-95 group-hover:scale-100 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      style={{ objectFit: 'cover' }}
+                      className="group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-[#13111b]/90 border border-dark-purple text-white">
                       {p.category}

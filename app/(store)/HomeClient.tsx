@@ -84,6 +84,12 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
   const getSafeImageSrc = (src?: string | null, fallback = '/hero-cues.png') => {
     const value = (src ?? '').trim();
     if (!value) return fallback;
+    
+    // Convert old full URLs from championshop.id to relative paths for dev/prod compatibility
+    if (value.includes('championshop.id/uploads/')) {
+      return '/' + value.split('championshop.id/uploads/')[1];
+    }
+    
     if (value.startsWith('/')) return value;
     if (value.startsWith('http://') || value.startsWith('https://')) return value;
     return `/${value.replace(/^\.?\//, '')}`;
@@ -345,16 +351,15 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {bestSellers.map((product) => (
               <div key={product.id} className="premium-card premium-card-hover rounded-xl overflow-hidden p-3 sm:p-4 flex flex-col gap-3.5 sm:gap-4 group h-full">
-                {/* Product Thumbnail */}
-                <div className="relative aspect-video rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35 flex items-center justify-center p-2">
+                <div className="relative aspect-square rounded-lg overflow-hidden bg-[#09080e] border border-dark-purple/35">
                   <Image
                     src={product.imageUrl}
                     alt={product.name}
-                    width={160}
-                    height={90}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     loading="lazy"
-                    style={{ objectFit: 'contain' }}
-                    className="scale-95 group-hover:scale-100 transition-transform duration-500"
+                    style={{ objectFit: 'cover' }}
+                    className="group-hover:scale-105 transition-transform duration-500"
                   />
                   
                   {/* Category tag */}

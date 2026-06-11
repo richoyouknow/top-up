@@ -18,7 +18,8 @@ import {
   X,
   User,
   Lock,
-  ArrowRight
+  ArrowRight,
+  Globe
 } from 'lucide-react';
 
 const navItems = [
@@ -29,6 +30,7 @@ const navItems = [
   { name: 'Keuangan', href: '/admin/cashflow', icon: DollarSign },
   { name: 'Konten', href: '/admin/content', icon: FileText },
   { name: 'Pengaturan', href: '/admin/settings', icon: Settings },
+  { name: 'Lihat Toko', href: '/', icon: Globe },
 ];
 
 import { login } from '@/app/actions/auth';
@@ -203,7 +205,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/admin');
+            const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/admin' && item.href !== '/');
             const Icon = item.icon;
             
             return (
@@ -259,7 +261,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
               {navItems.map((item) => {
-                const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/admin');
+                const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/admin' && item.href !== '/');
                 const Icon = item.icon;
                 return (
                   <Link 

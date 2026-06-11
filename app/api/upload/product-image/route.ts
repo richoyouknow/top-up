@@ -46,9 +46,8 @@ export async function POST(request: Request) {
     const filePath = path.join(uploadDir, fileName);
     await writeFile(filePath, buffer);
 
-    const origin = new URL(request.url).origin;
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || origin;
-    const publicUrl = `${baseUrl}/uploads/products/${fileName}`;
+    // Return relative path so images work in both dev and production
+    const publicUrl = `/uploads/products/${fileName}`;
 
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
