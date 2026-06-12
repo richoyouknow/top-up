@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { getUploadDir } from "@/lib/upload";
 
 export async function getProducts() {
   try {
@@ -91,7 +92,8 @@ export async function deleteProduct(id: string) {
       // Ensure we only touch paths under uploads/
       if (imagePath.startsWith('/uploads/') || imagePath.startsWith('uploads/')) {
         const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-        const absolutePath = path.join(process.cwd(), 'public', cleanPath);
+        const relativeToUploads = cleanPath.replace(/^uploads\//, '');
+        const absolutePath = path.join(getUploadDir(), relativeToUploads);
         
         try {
           if (fs.existsSync(absolutePath)) {
